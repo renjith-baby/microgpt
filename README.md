@@ -6,8 +6,12 @@ A browser-based visualization tool for training and inference with a minimal GPT
 
 - **Real-time Training Visualization**: Watch loss decrease as the model trains
 - **Interactive Controls**: Adjust learning rate, number of steps, and temperature
+- **Developer Guidance**: Inline hints, explainers, and presets for each training knob
 - **Multiple Training Runs**: Compare different training runs with color-coded loss curves
 - **Inference Generation**: Generate samples and see per-token probability distributions
+- **Neural Network View**: Live activation-flow visualization during both training and inference
+- **Inference Replay Studio**: Scrub token-by-token through stage flow, top-k decisions, and attention heads
+- **Cinematic Inference Mode (Opt-in)**: Guided stage-by-stage walkthrough (Embed -> Normalize -> Attention -> MLP -> Logits -> Sample)
 - **No Dependencies**: Pure vanilla JavaScript, no frameworks or bundlers required
 
 ## How to Run
@@ -35,6 +39,31 @@ Using Node.js (with `http-server`):
 ```bash
 npx http-server
 ```
+
+## React + Tailwind Frontend (New)
+
+A modern frontend migration is available in `frontend/` (React + Vite + Tailwind), while keeping model compute in `worker.js`.
+
+One-line local run from repo root:
+```bash
+./run-ui.sh
+```
+
+Run it locally:
+```bash
+cd frontend
+npm install
+npm run sync-worker
+npm run dev
+```
+
+Build for production:
+```bash
+cd frontend
+npm run build
+```
+
+GitHub Pages now deploys `frontend/dist` via Actions, so pushes to `main` publish the React UI end-to-end.
 
 ## Deploy on GitHub Pages
 
@@ -66,6 +95,8 @@ Notes:
 4. After training completes, see the summary comparing to the previous run
 
 5. Each training run is shown in a different color on the chart
+6. Use presets (`Safe`, `Balanced`, `Experimental`) to start from tuned defaults
+7. Read the auto `Explain this run` summary for next-step recommendations
 
 ### Inference
 

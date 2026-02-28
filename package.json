@@ -5,7 +5,9 @@
   "description": "Minimal GPT training visualizer and reference TypeScript implementation",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node microgpt.ts"
+    "start": "ts-node microgpt.ts",
+    "ui:dev": "./run-ui.sh",
+    "ui:build": "npm --prefix frontend run sync-worker && npm --prefix frontend run build"
   },
   "devDependencies": {
     "@types/node": "^25.3.2",
