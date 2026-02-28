@@ -36,6 +36,20 @@ Using Node.js (with `http-server`):
 npx http-server
 ```
 
+## Deploy on GitHub Pages
+
+This repository includes a workflow at `.github/workflows/pages.yml` that deploys the static app to GitHub Pages on every push to `main`.
+
+1. Open repository settings: `Settings -> Pages`
+2. Under **Source**, choose **GitHub Actions**
+3. Push to `main` (or run the workflow manually from **Actions**)
+4. Your site will be published at:
+   - `https://renjith-baby.github.io/microgpt/`
+
+Notes:
+- GitHub Pages serves static files only, which is perfect for this project.
+- If Pages is unavailable on your current private-repo plan, make the repo public or use Vercel/Netlify instead.
+
 ## Usage
 
 ### Training
