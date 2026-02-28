@@ -356,15 +356,40 @@ export default function App() {
     return `${trend} ${lrHint} ${tempHint}`;
   }, [currentRun, runs]);
 
+  const repoUrl = 'https://github.com/renjith-baby/microgpt';
+  const readmeUrl = `${repoUrl}#readme`;
+
   return (
     <div className="studio-shell min-h-screen">
       <div className="studio-noise" />
       <div className="mx-auto max-w-7xl p-4 md:p-6">
         <header className="hero-card mb-4 rounded-2xl p-4 md:p-5">
-          <h1 className="text-2xl font-semibold tracking-tight text-slate-100">MicroGPT Developer Studio</h1>
-          <p className="mt-1 text-sm text-slate-300">
-            Fast by default. Rich replay + cinematic walkthrough available on demand.
-          </p>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-100">MicroGPT Developer Studio</h1>
+              <p className="mt-1 text-sm text-slate-300">
+                Fast by default. Rich replay + cinematic walkthrough available on demand.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <a
+                href={repoUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-md border border-slate-500/80 bg-slate-900/70 px-3 py-1.5 text-xs font-medium text-slate-100 hover:bg-slate-800"
+              >
+                GitHub Repo
+              </a>
+              <a
+                href={readmeUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-md border border-slate-500/80 bg-slate-900/70 px-3 py-1.5 text-xs font-medium text-slate-100 hover:bg-slate-800"
+              >
+                Docs
+              </a>
+            </div>
+          </div>
         </header>
 
         <div className="studio-card mb-4 rounded-lg px-3 py-2 text-sm text-sky-200">
