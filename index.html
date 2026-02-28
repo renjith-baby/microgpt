@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT Training Visualizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .panel {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #2a2a2a;
+        }
+
+        .panel:last-child {
+            border-right: none;
+        }
+
+        h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        #lossChart {
+            display: block;
+            width: 100%;
+            background: #0f0f0f;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #b0b0b0;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            background: #2a2a2a;
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .value-display {
+            min-width: 60px;
+            text-align: right;
+            font-size: 13px;
+            color: #ffffff;
+            font-variant-numeric: tabular-nums;
+        }
+
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover:not(:disabled) {
+            background: #2563eb;
+        }
+
+        button:disabled {
+            background: #2a2a2a;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin: 15px 0;
+            padding: 10px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            font-size: 13px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .summary {
+            margin: 15px 0;
+            padding: 10px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #10b981;
+        }
+
+        .history {
+            margin-top: 20px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .history-table th {
+            color: #b0b0b0;
+            font-weight: 500;
+        }
+
+        .history-table td {
+            color: #e0e0e0;
+        }
+
+        .color-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .samples-container {
+            margin-top: 20px;
+        }
+
+        .sample {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 4px;
+            border: 1px solid #2a2a2a;
+        }
+
+        .sample-text {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+        }
+
+        .token-probs {
+            margin-top: 10px;
+        }
+
+        .token-prob-item {
+            margin-bottom: 12px;
+            padding: 8px;
+            background: #0f0f0f;
+            border-radius: 3px;
+        }
+
+        .token-label {
+            display: inline-block;
+            width: 50px;
+            font-size: 11px;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .prob-bar-container {
+            width: 80px;
+            height: 14px;
+            background: #2a2a2a;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .prob-bar {
+            height: 100%;
+            background: #3b82f6;
+            transition: width 0.3s;
+            border-radius: 2px;
+        }
+
+        .prob-bar.selected {
+            background: #10b981;
+        }
+
+        .temperature-note {
+            margin-top: 15px;
+            padding: 10px;
+            background: #1a1a1a;
+            border-left: 3px solid #3b82f6;
+            font-size: 12px;
+            color: #b0b0b0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Training Panel -->
+        <div class="panel">
+            <h2>Training</h2>
+            
+            <div class="chart-container">
+                <canvas id="lossChart" width="600" height="300"></canvas>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label for="learningRate">Learning Rate</label>
+                    <div class="slider-container">
+                        <input type="range" id="learningRate" min="0.001" max="0.1" step="0.001" value="0.01">
+                        <span class="value-display" id="learningRateValue">0.01</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="numSteps">Number of Steps</label>
+                    <div class="slider-container">
+                        <input type="range" id="numSteps" min="100" max="2000" step="100" value="500">
+                        <span class="value-display" id="numStepsValue">500</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="temperature">Temperature</label>
+                    <div class="slider-container">
+                        <input type="range" id="temperature" min="0.1" max="2.0" step="0.1" value="0.5">
+                        <span class="value-display" id="temperatureValue">0.5</span>
+                    </div>
+                </div>
+
+                <button id="trainButton">Train</button>
+            </div>
+
+            <div class="status" id="status">Ready to train</div>
+            <div class="summary" id="summary" style="display: none;"></div>
+
+            <div class="history">
+                <h3 style="font-size: 14px; margin-bottom: 10px; color: #b0b0b0;">Run History</h3>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Run</th>
+                            <th>LR</th>
+                            <th>Steps</th>
+                            <th>Final Loss</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Inference Panel -->
+        <div class="panel">
+            <h2>Inference</h2>
+            
+            <button id="generateButton" disabled>Generate</button>
+
+            <div class="temperature-note" id="temperatureNote">
+                Temperature: <span id="currentTemperature">0.5</span> (adjust in Training panel)
+            </div>
+
+            <div class="samples-container" id="samplesContainer">
+                <p style="color: #666; font-size: 13px;">Train the model first to generate samples.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
