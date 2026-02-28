@@ -1,4 +1,8 @@
 {
+  "name": "microgpt-training-visualizer",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Minimal GPT training visualizer and reference TypeScript implementation",
   "scripts": {
     "build": "tsc",
     "start": "ts-node microgpt.ts"
@@ -7,9 +11,5 @@
     "@types/node": "^25.3.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
-  },
-  "dependencies": {
-    "@anthropic-ai/claude-code": "^2.1.63",
-    "@google/gemini-cli": "^0.31.0"
   }
 }
