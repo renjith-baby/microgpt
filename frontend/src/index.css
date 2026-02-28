@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,7 +9,13 @@
 }
 
 body {
-  @apply m-0 min-h-screen bg-ink text-slate-100 antialiased;
+  @apply m-0 min-h-screen text-slate-100 antialiased;
+  font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background:
+    radial-gradient(1200px 700px at 10% -10%, rgba(56, 189, 248, 0.18), transparent 45%),
+    radial-gradient(900px 520px at 95% 8%, rgba(147, 51, 234, 0.18), transparent 42%),
+    radial-gradient(1000px 600px at 50% 120%, rgba(14, 165, 233, 0.14), transparent 45%),
+    #050816;
 }
 
 .range {
@@ -20,4 +28,36 @@ body {
 
 .range::-moz-range-thumb {
   @apply h-4 w-4 rounded-full border-none bg-sky-400;
+}
+
+.studio-shell {
+  position: relative;
+}
+
+.studio-noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image: radial-gradient(rgba(148, 163, 184, 0.45) 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+}
+
+.hero-card {
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(8, 47, 73, 0.65));
+  box-shadow:
+    0 18px 45px rgba(2, 6, 23, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.studio-card {
+  border: 1px solid rgba(51, 65, 85, 0.9);
+  background: linear-gradient(160deg, rgba(11, 18, 32, 0.92), rgba(10, 13, 24, 0.92));
+  box-shadow: 0 10px 28px rgba(2, 6, 23, 0.32);
+}
+
+.mono {
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }

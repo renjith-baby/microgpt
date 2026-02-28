@@ -357,22 +357,23 @@ export default function App() {
   }, [currentRun, runs]);
 
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="studio-shell min-h-screen">
+      <div className="studio-noise" />
       <div className="mx-auto max-w-7xl p-4 md:p-6">
-        <header className="mb-4 rounded-2xl border border-sky-900/50 bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950 p-4 md:p-5">
+        <header className="hero-card mb-4 rounded-2xl p-4 md:p-5">
           <h1 className="text-2xl font-semibold tracking-tight text-slate-100">MicroGPT Developer Studio</h1>
           <p className="mt-1 text-sm text-slate-300">
             Fast by default. Rich replay + cinematic walkthrough available on demand.
           </p>
         </header>
 
-        <div className="mb-4 rounded-lg border border-slate-700 bg-slate-900/70 px-3 py-2 text-sm text-sky-200">
+        <div className="studio-card mb-4 rounded-lg px-3 py-2 text-sm text-sky-200">
           {status}
         </div>
 
         <div className="grid gap-4 xl:grid-cols-[370px_1fr]">
           <aside className="space-y-4">
-            <section className="rounded-xl border border-slate-700 bg-panel p-4">
+            <section className="studio-card rounded-xl p-4">
               <h2 className="mb-2 text-lg font-medium text-slate-100">Training Controls</h2>
               <p className="mb-3 text-xs text-slate-400">
                 1) Choose a preset or tune knobs. 2) Train. 3) Generate and inspect token-level flow.
@@ -437,20 +438,20 @@ export default function App() {
               </div>
             </section>
 
-            <section className="rounded-xl border border-slate-700 bg-panel p-4">
+            <section className="studio-card rounded-xl p-4">
               <h3 className="mb-2 text-sm font-semibold text-slate-200">Explain This Run</h3>
               <p className="text-xs leading-relaxed text-slate-300">{runSummary || 'Complete a training run to get automated analysis and next-step advice.'}</p>
             </section>
           </aside>
 
           <main className="space-y-4">
-            <section className="rounded-xl border border-slate-700 bg-panel p-4">
+            <section className="studio-card rounded-xl p-4">
               <h2 className="mb-3 text-lg font-medium text-slate-100">Loss Curve</h2>
               <canvas ref={lossCanvasRef} width={1100} height={280} className="w-full rounded-lg border border-slate-700 bg-slate-950" />
               <p className="mt-2 text-xs text-slate-400">Lower curve usually means better next-token prediction quality.</p>
             </section>
 
-            <section className="rounded-xl border border-slate-700 bg-panel p-4">
+            <section className="studio-card rounded-xl p-4">
               <h2 className="mb-3 text-lg font-medium text-slate-100">Live Network Flow</h2>
               <canvas ref={flowCanvasRef} width={1100} height={220} className="w-full rounded-lg border border-slate-700 bg-slate-950" />
               <div className="mt-2 text-xs text-slate-300">
@@ -467,7 +468,7 @@ export default function App() {
               </div>
             </section>
 
-            <section className="rounded-xl border border-slate-700 bg-panel p-4">
+            <section className="studio-card rounded-xl p-4">
               <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
                 <h2 className="text-lg font-medium text-slate-100">Inference Replay</h2>
                 <div className="flex items-center gap-2 text-xs text-slate-300">
@@ -544,7 +545,7 @@ export default function App() {
                           value={whatIfTemp}
                           onChange={(e) => setWhatIfTemp(parseFloat(e.target.value))}
                         />
-                        <span className="w-8 text-right font-mono text-slate-200">{whatIfTemp.toFixed(1)}</span>
+                        <span className="mono w-8 text-right text-slate-200">{whatIfTemp.toFixed(1)}</span>
                       </div>
                     </div>
                     <div className="space-y-1.5">
@@ -612,7 +613,7 @@ export default function App() {
                     {samples.map((s, i) => (
                       <article key={i} className="rounded-lg border border-slate-700 bg-slate-950/60 p-3">
                         <div className="mb-1 text-xs text-slate-400">Sample {i + 1}</div>
-                        <div className="font-mono text-sm text-slate-100">{s.text || '(empty)'}</div>
+                        <div className="mono text-sm text-slate-100">{s.text || '(empty)'}</div>
                       </article>
                     ))}
                   </div>
@@ -640,7 +641,7 @@ function SliderKnob({ label, value, min, max, step, hint, onChange, integer = fa
           value={value}
           onChange={(e) => onChange(integer ? parseInt(e.target.value, 10) : parseFloat(e.target.value))}
         />
-        <span className="w-14 text-right font-mono text-sm text-slate-200">
+        <span className="mono w-14 text-right text-sm text-slate-200">
           {integer ? value : Number(value).toFixed(3).replace(/0+$/, '').replace(/\.$/, '')}
         </span>
       </div>
@@ -655,7 +656,7 @@ function FlowRow({ label, value, max, detail }) {
     <div>
       <div className="mb-1 flex items-center justify-between text-xs text-slate-300">
         <span>{label}</span>
-        <span className="font-mono">{value.toFixed(3)}</span>
+        <span className="mono">{value.toFixed(3)}</span>
       </div>
       <div className="h-2 rounded bg-slate-700">
         <div className="h-2 rounded bg-gradient-to-r from-cyan-400 to-blue-500" style={{ width: `${pct}%` }} />
@@ -668,14 +669,14 @@ function FlowRow({ label, value, max, detail }) {
 function TopKBar({ token, prob, highlight }) {
   return (
     <div className="grid grid-cols-[56px_1fr_44px] items-center gap-2 text-xs">
-      <span className={`font-mono ${highlight ? 'text-emerald-300' : 'text-slate-300'}`}>{token}</span>
+      <span className={`mono ${highlight ? 'text-emerald-300' : 'text-slate-300'}`}>{token}</span>
       <div className="h-2 rounded bg-slate-700">
         <div
           className={`h-2 rounded ${highlight ? 'bg-gradient-to-r from-emerald-400 to-green-500' : 'bg-gradient-to-r from-cyan-400 to-blue-500'}`}
           style={{ width: `${Math.max(1, prob * 100)}%` }}
         />
       </div>
-      <span className="text-right font-mono text-slate-300">{(prob * 100).toFixed(1)}%</span>
+      <span className="mono text-right text-slate-300">{(prob * 100).toFixed(1)}%</span>
     </div>
   );
 }
