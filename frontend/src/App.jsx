@@ -56,7 +56,7 @@ export default function App() {
   const hasTrace = currentTrace.length > 0;
 
   useEffect(() => {
-    const worker = new Worker('/worker.js');
+    const worker = new Worker(`${import.meta.env.BASE_URL}worker.js`);
     workerRef.current = worker;
 
     worker.onmessage = (event) => {
